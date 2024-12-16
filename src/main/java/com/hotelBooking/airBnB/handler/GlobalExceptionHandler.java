@@ -1,4 +1,4 @@
-package com.hotelBooking.airBnB.Handler;
+package com.hotelBooking.airBnB.handler;
 
 import com.hotelBooking.airBnB.dto.ApiError;
 import com.hotelBooking.airBnB.exceptions.ResourceNotFoundException;
