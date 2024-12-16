@@ -12,3 +12,7 @@ spring:
     properties:
       hibernate:
         format-sql: true
+
+server:
+  servlet:
+    context-path: /v1/api

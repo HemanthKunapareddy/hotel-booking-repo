@@ -19,6 +19,9 @@ public class Hotel {
     @Column(name = "hotel_id")
     private long id;
 
+    @Column(name = "hotel_name")
+    private String hotelName;
+
     @Column(name = "city")
     private String city;
 
