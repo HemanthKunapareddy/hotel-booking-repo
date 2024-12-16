@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: airBnB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: Hemanth!@#$5
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format-sql: true
