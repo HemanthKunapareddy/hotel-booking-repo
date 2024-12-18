@@ -5,6 +5,7 @@ import com.hotelBooking.airBnB.entity.Hotel;
 import com.hotelBooking.airBnB.exceptions.ResourceNotFoundException;
 import com.hotelBooking.airBnB.repository.HotelRepository;
 import com.hotelBooking.airBnB.service.HotelService;
+import com.hotelBooking.airBnB.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class HotelServiceImpl implements HotelService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private HotelRepository hotelRepository;
+    private final HotelRepository hotelRepository;
+
+    private final InventoryService inventoryService;
 
     public HotelDTO createHotel(HotelDTO hotelDTO) {
         log.info("Creating new hotel with hotel name {}.", hotelDTO.getHotelName());
@@ -35,19 +36,50 @@ public class HotelServiceImpl implements HotelService {
         return modelMapper.map(hotel, HotelDTO.class);
     }
 
-    public HotelDTO getHotel(long hotelId){
+    public HotelDTO getHotelById(Long hotelId) {
         log.info("Fetching hotel details for hotel id {}", hotelId);
         Optional<Hotel> hotel = hotelRepository.findById(hotelId);
         return hotel.map(htl -> modelMapper.map(htl, HotelDTO.class))
-                .orElseThrow(()-> new ResourceNotFoundException("Hotel not Found with id:"+hotelId));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not Found with the id:" + hotelId));
     }
 
-    public List<HotelDTO> getAllHotels(){
+    public List<HotelDTO> getAllHotels() {
         log.info("Fetch all hotels!!");
         List<Hotel> hotels = hotelRepository.findAll();
         return hotels
                 .stream()
                 .map(hotel -> modelMapper.map(hotel, HotelDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public HotelDTO updateHotelById(Long hotelId, HotelDTO hotelDTO) {
+        log.info("Updating hotel with id: {} with new hotel details.", hotelId);
+        Hotel hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(()->new ResourceNotFoundException("No hotel found with id: "+ hotelId));
+        modelMapper.map(hotelDTO, hotel);
+        hotel.setId(hotelId);
+        hotel = hotelRepository.save(hotel);
+        return modelMapper.map(hotel, HotelDTO.class);
+    }
+
+    @Override
+    public void setHotelToActive(Long hotelId) {
+        log.info("Setting hotel with Id: {} to active", hotelId);
+        Hotel hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(()->new ResourceNotFoundException("No hotel found with id: "+ hotelId));
+        hotel.setActive(true);
+        hotelRepository.save(hotel);
+        hotel.getRooms().forEach(inventoryService::createInventoryForRoom);
+    }
+
+    public void deleteHotelById(Long hotelId) {
+        log.info("Deleting hotel with Id: {}", hotelId);
+        Hotel hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with the Id: " + hotelId));
+        hotelRepository.delete(hotel);
     }
 }

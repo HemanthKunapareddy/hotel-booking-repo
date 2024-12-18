@@ -8,7 +8,13 @@ public interface HotelService {
 
     HotelDTO createHotel(HotelDTO hotelDTO);
 
-    HotelDTO getHotel(long hotelId);
+    HotelDTO getHotelById(Long hotelId);
 
     List<HotelDTO> getAllHotels();
+
+    HotelDTO updateHotelById(Long hotelId, HotelDTO hotelDTO);
+
+    void setHotelToActive(Long hotelId);
+
+    void deleteHotelById(Long hotelId);
 }

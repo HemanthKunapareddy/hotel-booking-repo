@@ -2,7 +2,7 @@ spring:
   application:
     name: airBnB
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/airBnb
     username: postgres
     password: Hemanth!@#$5
   jpa:
