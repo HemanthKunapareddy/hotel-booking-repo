@@ -42,6 +42,9 @@ public class Inventory {
     @Column(name = "booked_count", columnDefinition = "INTEGER DEFAULT 0")
     private int bookedCount;
 
+    @Column(name = "reservedCount", columnDefinition = "INTEGER DEFAULT 0")
+    private int reservedCount;
+
     @Column(name = "total_count")
     private int totalCount;
 

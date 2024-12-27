@@ -1,5 +1,6 @@
 package com.hotelBooking.airBnB.controller;
 
+import com.hotelBooking.airBnB.constants.AppConstants;
 import com.hotelBooking.airBnB.dto.HotelDTO;
 import com.hotelBooking.airBnB.service.HotelService;
 import jakarta.validation.Valid;
@@ -22,21 +23,21 @@ public class HotelController {
 
     @PostMapping
     public ResponseEntity<HotelDTO> createHotel(@Valid @RequestBody HotelDTO hotelDTO) {
-        log.info("IN {} CLASS : IN {} METHOD : {}", CLASS_NAME, "createHotel", "Creating Hotel!!");
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "createHotel");
         HotelDTO hotel = hotelService.createHotel(hotelDTO);
         return ResponseEntity.ok(hotel);
     }
 
     @GetMapping("/{hotelId}")
     public ResponseEntity<HotelDTO> getHotelById(@PathVariable Long hotelId) {
-        log.info("IN {} CLASS : IN {} METHOD : {}", CLASS_NAME, "getHotel", "Fetching Hotel Details");
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getHotel");
         HotelDTO hotel = hotelService.getHotelById(hotelId);
         return ResponseEntity.ok(hotel);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllHotel() {
-        log.info("IN {} CLASS : IN {} METHOD : {}", CLASS_NAME, "getAllHotels", "Fetching all Hotel Details");
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getAllHotels");
         List<HotelDTO> hotels = hotelService.getAllHotels();
         return ResponseEntity.ok(hotels);
     }
@@ -44,21 +45,21 @@ public class HotelController {
     @PutMapping("/{hotelId}")
     public ResponseEntity<HotelDTO> updateHotelById(@Valid @RequestBody HotelDTO hotelDTO,
                                                     @PathVariable Long hotelId) {
-        log.info("IN {} CLASS : IN {} METHOD : {}", CLASS_NAME, "updateHotelById", "Updating hotel details with new hotel details.");
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "updateHotelById");
         HotelDTO hotel = hotelService.updateHotelById(hotelId, hotelDTO);
         return ResponseEntity.ok(hotel);
     }
 
     @PatchMapping("/{hotelId}")
     public ResponseEntity<?> setHotelToActive(@PathVariable Long hotelId){
-        log.info("IN {} CLASS : IN {} METHOD : {}", CLASS_NAME, "setHotelToActive", "Setting hotel to active.");
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "setHotelToActive");
         hotelService.setHotelToActive(hotelId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{hotelId}")
     public ResponseEntity<?> deleteHotelById(@PathVariable Long hotelId) {
-        log.info("IN {} CLASS : IN {} METHOD : {}", CLASS_NAME, "deleteHotelById", "Deleting hotel by Id.");
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "deleteHotelById");
         hotelService.deleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
     }
