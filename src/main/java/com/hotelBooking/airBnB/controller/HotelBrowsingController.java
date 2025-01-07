@@ -3,6 +3,7 @@ package com.hotelBooking.airBnB.controller;
 import com.hotelBooking.airBnB.constants.AppConstants;
 import com.hotelBooking.airBnB.dto.HotelDTO;
 import com.hotelBooking.airBnB.dto.HotelInfoDTO;
+import com.hotelBooking.airBnB.dto.HotelMinDTO;
 import com.hotelBooking.airBnB.dto.HotelSearchRequestDTO;
 import com.hotelBooking.airBnB.service.BrowsingService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,13 @@ public class HotelBrowsingController {
     public ResponseEntity<Page<HotelDTO>> searchHotel(@RequestBody HotelSearchRequestDTO hotelSearchRequestDTO){
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "searchHotel");
         Page<HotelDTO> hotels = browsingService.searchHotelBasedOnDates(hotelSearchRequestDTO);
+        return ResponseEntity.ok(hotels);
+    }
+
+    @PostMapping("/searchHotelBasedOnMinPrice")
+    public ResponseEntity<Page<HotelMinDTO>> searchHotelBasedONMinPrices(@RequestBody HotelSearchRequestDTO hotelSearchRequestDTO){
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "searchHotel");
+        Page<HotelMinDTO> hotels = browsingService.searchHotelMinPricesBasedOnDates(hotelSearchRequestDTO);
         return ResponseEntity.ok(hotels);
     }
 

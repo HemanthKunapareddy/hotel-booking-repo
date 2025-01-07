@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -67,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
         inventoryRepository.saveAll(inventories);
 
         User user = userRepository.findById(1L)
-                .orElseThrow(()-> new ResourceNotFoundException("User with Id: 1 not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with Id: 1 not found"));
 
         Booking booking = Booking.builder()
                 .hotelId(hotel)
@@ -87,20 +86,20 @@ public class BookingServiceImpl implements BookingService {
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "addGuestsToBooking");
         Booking booking = bookingRepository
                 .findById(bookingId)
-                .orElseThrow(()-> new ResourceNotFoundException("Booking with Id: "+bookingId+" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking with Id: " + bookingId + " not found"));
 
         User user = userRepository.findById(1L)
-                .orElseThrow(()->new ResourceNotFoundException("User with id: 1 not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: 1 not found"));
 
-        if(isBookingExpired(booking)){
+        if (isBookingExpired(booking)) {
             throw new IllegalStateException("Booking Expired!!");
         }
 
-        if(!booking.getBookingStatus().equals(BookingStatus.RESERVED)){
+        if (!booking.getBookingStatus().equals(BookingStatus.RESERVED)) {
             throw new IllegalStateException("Booking status is not RESERVED, cannot proceed booking");
         }
 
-        for(GuestDTO guest: guests){
+        for (GuestDTO guest : guests) {
             Guest gst = modelMapper.map(guest, Guest.class);
             gst.setUserId(user);
             gst = guestRepository.save(gst);
@@ -112,7 +111,7 @@ public class BookingServiceImpl implements BookingService {
         return modelMapper.map(booking, BookingDTO.class);
     }
 
-    public boolean isBookingExpired(Booking booking){
+    public boolean isBookingExpired(Booking booking) {
         return booking.getCreatedAt().plusMinutes(10).isEqual(LocalDateTime.now());
     }
 }

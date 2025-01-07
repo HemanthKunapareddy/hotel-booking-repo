@@ -1,11 +1,10 @@
 package com.hotelBooking.airBnB.service.implementation;
 
-import com.hotelBooking.airBnB.dto.HotelDTO;
-import com.hotelBooking.airBnB.dto.HotelInfoDTO;
-import com.hotelBooking.airBnB.dto.HotelSearchRequestDTO;
-import com.hotelBooking.airBnB.dto.RoomDTO;
+import com.hotelBooking.airBnB.dto.*;
 import com.hotelBooking.airBnB.entity.Hotel;
+import com.hotelBooking.airBnB.entity.HotelMinPrice;
 import com.hotelBooking.airBnB.exceptions.ResourceNotFoundException;
+import com.hotelBooking.airBnB.repository.HotelMinPriceRepository;
 import com.hotelBooking.airBnB.repository.HotelRepository;
 import com.hotelBooking.airBnB.repository.InventoryRepository;
 import com.hotelBooking.airBnB.service.BrowsingService;
@@ -24,6 +23,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class BrowsingServiceImpl implements BrowsingService {
+    private final HotelMinPriceRepository hotelMinPriceRepository;
 
     private static final String CLASS_NAME = BrowsingServiceImpl.class.getSimpleName();
 
@@ -50,6 +50,15 @@ public class BrowsingServiceImpl implements BrowsingService {
     }
 
     @Override
+    public Page<HotelMinDTO> searchHotelMinPricesBasedOnDates(HotelSearchRequestDTO searchRequestDTO) {
+        Pageable pageable = PageRequest.of(searchRequestDTO.getPage(), searchRequestDTO.getPageItems());
+
+        return hotelMinPriceRepository.searchHotelMinPricesBasedOnDates(searchRequestDTO.getCity(),
+                searchRequestDTO.getStartDate(), searchRequestDTO.getEndDate(), pageable);
+    }
+
+
+    @Override
     public HotelInfoDTO getHotelAndRoomsById(Long hotelId) {
         log.info(IN_CLASS_METHOD, CLASS_NAME, "getHotelAndRoomsById");
 
@@ -64,4 +73,5 @@ public class BrowsingServiceImpl implements BrowsingService {
                 .toList();
         return new HotelInfoDTO(modelMapper.map(hotel, HotelDTO.class), rooms);
     }
+
 }
