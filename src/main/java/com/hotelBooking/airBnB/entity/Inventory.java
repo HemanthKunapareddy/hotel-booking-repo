@@ -1,8 +1,7 @@
 package com.hotelBooking.airBnB.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +18,9 @@ import java.time.LocalDateTime;
                 columnNames = {"hotel_id", "room_id", "date"}
         )
 )
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Inventory {
 
     @Id
@@ -28,17 +30,20 @@ public class Inventory {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id", nullable = false)
-    private Hotel hotelId;
+    private Hotel hotel;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room roomId;
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @Column(nullable = false)
     private LocalDate date;
 
     @Column(name = "booked_count", columnDefinition = "INTEGER DEFAULT 0")
     private int bookedCount;
+
+    @Column(name = "reservedCount", columnDefinition = "INTEGER DEFAULT 0")
+    private int reservedCount;
 
     @Column(name = "total_count")
     private int totalCount;

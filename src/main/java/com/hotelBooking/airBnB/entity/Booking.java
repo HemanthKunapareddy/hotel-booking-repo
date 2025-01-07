@@ -2,8 +2,7 @@ package com.hotelBooking.airBnB.entity;
 
 import com.hotelBooking.airBnB.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,6 +15,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "booking")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Booking {
 
     @Id
@@ -36,10 +38,6 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "payment_id")
-    private Payment paymentId;
 
     @Column(nullable = false, name = "check_out_date")
     private LocalDate checkInDate;

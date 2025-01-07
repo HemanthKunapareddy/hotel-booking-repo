@@ -2,13 +2,17 @@ spring:
   application:
     name: airBnB
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/airBnb
     username: postgres
     password: Hemanth!@#$5
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format-sql: true
+
+server:
+  servlet:
+    context-path: /v1/api

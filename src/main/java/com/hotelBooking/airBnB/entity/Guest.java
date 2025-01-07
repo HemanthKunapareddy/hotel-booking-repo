@@ -1,9 +1,9 @@
 package com.hotelBooking.airBnB.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hotelBooking.airBnB.enums.Gender;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Guest {
 
     @Id

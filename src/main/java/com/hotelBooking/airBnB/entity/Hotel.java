@@ -1,5 +1,6 @@
 package com.hotelBooking.airBnB.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +21,9 @@ public class Hotel {
     @Column(name = "hotel_id")
     private long id;
 
+    @Column(name = "hotel_name")
+    private String hotelName;
+
     @Column(name = "city")
     private String city;
 
@@ -30,6 +35,10 @@ public class Hotel {
 
     @Column(columnDefinition = "TEXT[]")
     private String[] amenities;
+
+    @OneToMany(mappedBy = "hotel")
+    @JsonIgnore
+    private List<Room> rooms;
 
     private boolean active;
 
