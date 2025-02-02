@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/rooms")
+@RequestMapping("/admin/{hotelId}/rooms")
 @RequiredArgsConstructor
 @Slf4j
 public class RoomController {
@@ -21,28 +21,21 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @PostMapping("/{hotelId}")
+    @PostMapping
     public ResponseEntity<RoomDTO> createRoomInHotel(@Valid @RequestBody RoomDTO roomDTO, @PathVariable Long hotelId){
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "createRoomInHotel");
         RoomDTO room = roomService.createRoomInHotel(hotelId, roomDTO);
         return ResponseEntity.ok(room);
     }
 
-    @GetMapping("/{hotelId}/{roomId}")
+    @GetMapping("/{roomId}")
     public ResponseEntity<RoomDTO> getRoomFromHotel(@PathVariable Long hotelId, @PathVariable Long roomId){
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getRoomFromHotel");
         RoomDTO room = roomService.getRoomFromHotel(hotelId, roomId);
         return ResponseEntity.ok(room);
     }
 
-    @GetMapping("/{roomId}")
-    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long roomId){
-        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getRoomById");
-        RoomDTO room = roomService.getRoomById(roomId);
-        return ResponseEntity.ok(room);
-    }
-
-    @GetMapping("/all/{hotelId}")
+    @GetMapping
     public ResponseEntity<List<RoomDTO>> getAllRoomsFromHotel(@PathVariable Long hotelId){
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getAllRoomsFromHotel", AppConstants.IN_CLASS_METHOD);
         List<RoomDTO> rooms = roomService.getAllRoomsFromHotel(hotelId);

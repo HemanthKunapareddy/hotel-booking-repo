@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class GuestDTO {
-    private long id;
-    private User userId;
     private String name;
     private Gender gender;
 }

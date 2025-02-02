@@ -40,6 +40,35 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     );
 
     @Query("""
+                SELECT i
+                FROM Inventory i
+                WHERE i.room.id = :roomId
+                  AND i.date BETWEEN :startDate AND :endDate
+                  AND (i.totalCount - i.bookedCount) >= :numberOfRooms
+                  AND i.closed = false
+            """)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Inventory> findAndLockReservedInventory(@Param("roomId") Long roomId,
+                                      @Param("startDate") LocalDate startDate,
+                                      @Param("endDate") LocalDate endDate,
+                                      @Param("numberOfRooms") Integer numberOfRooms);
+
+    @Query("""
+                UPDATE Inventory i
+                SET i.reservedCount = i.reservedCount - :numberOfRooms,
+                    i.bookedCount = i.bookedCount + :numberOfRooms
+                WHERE i.room.id = :roomId
+                  AND i.date BETWEEN :startDate AND :endDate
+                  AND (i.totalCount - i.bookedCount) >= :numberOfRooms
+                  AND i.reservedCount >= :numberOfRooms
+                  AND i.closed = false
+            """)
+    void confirmBooking(@Param("roomId") Long roomId,
+                        @Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate,
+                        @Param("numberOfRooms") Integer numberOfRooms);
+
+    @Query("""
             SELECT i
             FROM Inventory i
             WHERE i.room.id = :roomId

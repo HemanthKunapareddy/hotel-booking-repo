@@ -42,6 +42,10 @@ public class Hotel {
 
     private boolean active;
 
+    @ManyToOne(optional = false)
+    @JsonIgnore
+    private User owner;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
