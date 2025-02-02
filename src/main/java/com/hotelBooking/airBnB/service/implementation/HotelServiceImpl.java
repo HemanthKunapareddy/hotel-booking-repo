@@ -4,8 +4,10 @@ import com.hotelBooking.airBnB.dto.HotelDTO;
 import com.hotelBooking.airBnB.entity.Hotel;
 import com.hotelBooking.airBnB.exceptions.ResourceNotFoundException;
 import com.hotelBooking.airBnB.repository.HotelRepository;
+import com.hotelBooking.airBnB.repository.UserRepository;
 import com.hotelBooking.airBnB.service.HotelService;
 import com.hotelBooking.airBnB.service.InventoryService;
+import com.hotelBooking.airBnB.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class HotelServiceImpl implements HotelService {
+    private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
 
@@ -31,6 +34,7 @@ public class HotelServiceImpl implements HotelService {
         log.info("Creating new hotel with hotel name {}.", hotelDTO.getHotelName());
         Hotel hotel = modelMapper.map(hotelDTO, Hotel.class);
         hotel.setActive(false);
+        hotel.setOwner(UserUtil.getCurrentUser());
         hotel = hotelRepository.save(hotel);
         log.info("Hotel {} saved to database!", hotel.getHotelName());
         return modelMapper.map(hotel, HotelDTO.class);

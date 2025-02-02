@@ -5,6 +5,7 @@ import com.hotelBooking.airBnB.strategy.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class PricingStrategyService {
@@ -17,5 +18,11 @@ public class PricingStrategyService {
         pricingStrategy = new UrgencyPricingStrategy(pricingStrategy);
 
         return pricingStrategy.calculateFinalPrice(inventory);
+    }
+
+    public BigDecimal calculatePrice(List<Inventory> inventoryList){
+        return inventoryList.stream()
+                .map(this::getFinalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

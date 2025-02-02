@@ -12,7 +12,16 @@ spring:
     properties:
       hibernate:
         format-sql: true
-
 server:
   servlet:
     context-path: /v1/api
+jwt:
+  secret: sgsgevrvs-6464dsvcs-dvssv5sv-svv5r12
+
+frontend:
+  url: http://localhost:8080/v1/api
+
+Stripe:
+  secret:  sk_test_51QlOsVL4A37VnL9zPlHYHQGseDfHuUatxyJ0OuNShUuVIvL8ttqnAcYgyT7RHD6Fzu0CyHM3gM0cxk0PaFc7ScIz00sSdKS3hk
+  webhook:
+    secret: whsec_a14f8291761d7d2963be7a44f8cd10146198699ba055d71eaa4374ba520b586c

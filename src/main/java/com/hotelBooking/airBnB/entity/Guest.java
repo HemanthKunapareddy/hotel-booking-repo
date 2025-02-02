@@ -1,6 +1,7 @@
 package com.hotelBooking.airBnB.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hotelBooking.airBnB.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"userId"})
 public class Guest {
 
     @Id
@@ -22,8 +24,9 @@ public class Guest {
     @Column(name = "guest_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User userId;
 
     @Column(name = "guest_name")

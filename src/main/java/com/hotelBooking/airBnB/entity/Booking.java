@@ -1,12 +1,13 @@
 package com.hotelBooking.airBnB.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hotelBooking.airBnB.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -36,6 +37,9 @@ public class Booking {
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
 
+    @Column(nullable = false)
+    private Integer roomsCount;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
@@ -58,4 +62,10 @@ public class Booking {
             inverseJoinColumns = @JoinColumn(name = "guest_id")
     )
     private Set<Guest> guests;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal amount;
+
+    @Column(name = "paymentSessionId")
+    private String paymentSessionId;
 }
