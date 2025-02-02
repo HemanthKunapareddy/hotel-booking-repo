@@ -37,8 +37,6 @@ public class BookingController {
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "addGuests");
 
         BookingDTO booking = bookingService.addGuestsToBooking(bookingId, guests);
-        System.out.println("-----------------------777777777");
-
         return ResponseEntity.ok(booking);
     }
 
