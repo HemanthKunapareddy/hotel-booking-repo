@@ -1,6 +1,6 @@
 # 🏨 AirBnB Hotel Booking System
 
-A production-ready, full-featured hotel booking backend built with **Spring Boot**, integrating **JWT-based authentication**, **Stripe payment processing**, **dynamic pricing strategies**, and **real-time inventory management**. Designed to power an Airbnb-style platform where hotel managers can list properties and guests can search, book, and pay for rooms seamlessly.
+A backend for a hotel booking platform built with Spring Boot. It covers the full booking lifecycle — from hotel onboarding to room availability, guest management, and payment processing via Stripe. JWT-based auth is baked in, with role-based access control for hotel managers and guests.
 
 ---
 
