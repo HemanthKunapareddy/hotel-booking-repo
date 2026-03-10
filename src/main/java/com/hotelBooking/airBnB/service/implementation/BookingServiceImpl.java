@@ -6,7 +6,6 @@ import com.hotelBooking.airBnB.dto.BookingRequest;
 import com.hotelBooking.airBnB.dto.GuestDTO;
 import com.hotelBooking.airBnB.entity.*;
 import com.hotelBooking.airBnB.enums.BookingStatus;
-import com.hotelBooking.airBnB.enums.PaymentStatus;
 import com.hotelBooking.airBnB.exceptions.ResourceNotFoundException;
 import com.hotelBooking.airBnB.exceptions.UnAuthorisedException;
 import com.hotelBooking.airBnB.repository.*;
@@ -23,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +43,6 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final BookingRepository bookingRepository;
-
     private final InventoryRepository inventoryRepository;
     private final RoomRepository roomRepository;
     private final HotelRepository hotelRepository;
@@ -118,7 +115,7 @@ public class BookingServiceImpl implements BookingService {
                 .findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking with Id: " + bookingId + " not found"));
         User user = UserUtil.getCurrentUser();
-        if(!user.equals(booking.getUserId())){
+        if (!user.equals(booking.getUserId())) {
             throw new UnAuthorisedException("User accessing the booking is Forbidden");
         }
 
@@ -145,11 +142,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public String initiatePayment(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(()-> new ResourceNotFoundException("Booking with id: "+bookingId+" not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking with id: " + bookingId + " not found!"));
 
         User user = UserUtil.getCurrentUser();
 
-        if(!user.equals(booking.getUserId())){
+        if (!user.equals(booking.getUserId())) {
             throw new UnAuthorisedException("User accessing the booking is Forbidden");
         }
 
@@ -162,8 +159,8 @@ public class BookingServiceImpl implements BookingService {
         }
 
         String sessionURL = checkoutService.getCheckoutSession(booking,
-                frontendURL+"/success.html",
-                frontendURL+"/failure.html");
+                frontendURL + "/success.html",
+                frontendURL + "/failure.html");
 
         booking.setBookingStatus(PAYMENTS_PENDING);
         bookingRepository.save(booking);
@@ -181,7 +178,7 @@ public class BookingServiceImpl implements BookingService {
             String sessionId = session.getId();
             Booking booking =
                     bookingRepository.findByPaymentSessionId(sessionId).orElseThrow(() ->
-                            new ResourceNotFoundException("Booking not found for session ID: "+sessionId));
+                            new ResourceNotFoundException("Booking not found for session ID: " + sessionId));
 
             booking.setBookingStatus(BookingStatus.CONFIRMED);
             bookingRepository.save(booking);
@@ -207,7 +204,7 @@ public class BookingServiceImpl implements BookingService {
                 .findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking with Id: " + bookingId + " not found"));
         User user = UserUtil.getCurrentUser();
-        if(!user.equals(booking.getUserId())){
+        if (!user.equals(booking.getUserId())) {
             throw new UnAuthorisedException("User accessing the booking is Forbidden");
         }
 
@@ -218,7 +215,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setBookingStatus(CANCELLED);
         bookingRepository.save(booking);
 
-        try{
+        try {
             Session session = Session.retrieve(booking.getPaymentSessionId());
             RefundCreateParams refundCreateParams = RefundCreateParams.builder()
                     .setPaymentIntent(session.getPaymentIntent())
@@ -241,7 +238,7 @@ public class BookingServiceImpl implements BookingService {
         return booking.getCreatedAt().plusMinutes(10).isBefore(LocalDateTime.now());
     }
 
-    public BookingDTO mapGuestsDTO(BookingDTO bookingDTO){
+    public BookingDTO mapGuestsDTO(BookingDTO bookingDTO) {
         Set<GuestDTO> guestDTOSet = bookingDTO.getGuests()
                 .stream()
                 .map(gst -> modelMapper.map(gst, GuestDTO.class))
