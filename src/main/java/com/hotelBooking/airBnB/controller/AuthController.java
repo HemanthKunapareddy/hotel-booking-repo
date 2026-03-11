@@ -4,7 +4,7 @@ import com.hotelBooking.airBnB.dto.LoginDTO;
 import com.hotelBooking.airBnB.dto.LoginResponseDTO;
 import com.hotelBooking.airBnB.dto.SignUpDTO;
 import com.hotelBooking.airBnB.exceptions.ResourceNotFoundException;
-import com.hotelBooking.airBnB.security.AuthService;
+import com.hotelBooking.airBnB.security.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,13 +30,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response){
         LoginResponseDTO loginResponseDTO = authService.login(loginDTO);
         Cookie cookie = new Cookie("refreshToken", loginResponseDTO.getRefreshToken());
         cookie.setHttpOnly(true);
 
         response.addCookie(cookie);
-        return new ResponseEntity<>(loginResponseDTO.getAccessToken(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/refresh")

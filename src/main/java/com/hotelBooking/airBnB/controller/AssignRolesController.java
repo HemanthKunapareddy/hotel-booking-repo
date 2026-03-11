@@ -4,7 +4,6 @@ import com.hotelBooking.airBnB.dto.AssignRoleDTO;
 import com.hotelBooking.airBnB.entity.User;
 import com.hotelBooking.airBnB.enums.Role;
 import com.hotelBooking.airBnB.repository.UserRepository;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +26,9 @@ public class AssignRolesController {
 
     @PostMapping
     @PreAuthorize("hasRole('HOTEL_MANAGER')")
-    public ResponseEntity<?> assignRolesToTheUser(@RequestBody AssignRoleDTO assignRoleDTO){
+    public ResponseEntity<?> assignRolesToTheUser(@RequestBody AssignRoleDTO assignRoleDTO) {
         User user = userRepository.findByEmail(assignRoleDTO.getUsername())
-                .orElseThrow(()-> new UsernameNotFoundException("User with username: "+assignRoleDTO.getUsername()+" not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + assignRoleDTO.getUsername() + " not found!"));
         Set<Role> roles = user.getRoles();
         roles.addAll(assignRoleDTO.getRoles());
         user.setRoles(roles);

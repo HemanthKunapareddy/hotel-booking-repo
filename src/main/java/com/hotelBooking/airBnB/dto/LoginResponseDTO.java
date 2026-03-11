@@ -1,13 +1,12 @@
 package com.hotelBooking.airBnB.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class LoginResponseDTO {
+    private final String token = "jwt";
+    private final String tokenType = "Bearer";
     private String accessToken;
     private String refreshToken;
 }

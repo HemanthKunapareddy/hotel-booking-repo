@@ -43,10 +43,10 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
-    @Column(nullable = false, name = "check_out_date")
+    @Column(nullable = false, name = "check_in_date")
     private LocalDate checkInDate;
 
-    @Column(nullable = false, name = "check_in_date")
+    @Column(nullable = false, name = "check_out_date")
     private LocalDate checkOutDate;
 
     @CreationTimestamp
