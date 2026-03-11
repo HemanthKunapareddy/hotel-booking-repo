@@ -6,7 +6,7 @@ spring:
     username: postgres
     password: Hemanth!@#$5
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
