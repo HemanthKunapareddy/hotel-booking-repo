@@ -7,6 +7,7 @@ import com.hotelBooking.airBnB.repository.HotelMinPriceRepository;
 import com.hotelBooking.airBnB.repository.HotelRepository;
 import com.hotelBooking.airBnB.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PricingUpdateService {
 
     private final HotelRepository hotelRepository;
@@ -28,8 +30,9 @@ public class PricingUpdateService {
     private final PricingStrategyService pricingStrategyService;
     private final HotelMinPriceRepository hotelMinPriceRepository;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void updatePrices() {
+        log.info("Updating prices for hotels");
         int page = 0;
         int size = 100;
 

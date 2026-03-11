@@ -40,7 +40,7 @@ public class RoomServiceImpl implements RoomService {
         room = roomRepository.save(room);
         log.info("Creating a Room with Id: {} in Hotel with Id: {}", room.getId(), room.getHotel().getId());
 
-        if(hotel.isActive()){
+        if (hotel.isActive()) {
             inventoryService.createInventoryForRoom(room);
         }
 
@@ -61,7 +61,7 @@ public class RoomServiceImpl implements RoomService {
                     .toList()
                     .getFirst();
         } catch (NoSuchElementException e) {
-            throw new ResourceNotFoundException("Room wth id: "+roomId+" not found in hotel: "+hotelId);
+            throw new ResourceNotFoundException("Room wth id: " + roomId + " not found in hotel: " + hotelId);
         }
         return modelMapper.map(room, RoomDTO.class);
     }
@@ -93,7 +93,7 @@ public class RoomServiceImpl implements RoomService {
         log.info("Deleting room with id: {}", roomId);
         Room room = roomRepository
                 .findById(roomId)
-                .orElseThrow(()->new ResourceNotFoundException("Room with Id: "+roomId+ "not found!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Room with Id: " + roomId + "not found!!"));
         inventoryService.deleteInventoryForRoom(room);
         roomRepository.delete(room);
     }

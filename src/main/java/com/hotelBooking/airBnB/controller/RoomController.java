@@ -37,7 +37,7 @@ public class RoomController {
 
     @GetMapping
     public ResponseEntity<List<RoomDTO>> getAllRoomsFromHotel(@PathVariable Long hotelId){
-        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getAllRoomsFromHotel", AppConstants.IN_CLASS_METHOD);
+        log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "getAllRoomsFromHotel");
         List<RoomDTO> rooms = roomService.getAllRoomsFromHotel(hotelId);
         return ResponseEntity.ok(rooms);
     }
