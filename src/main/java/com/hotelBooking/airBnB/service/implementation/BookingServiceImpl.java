@@ -22,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -170,16 +172,21 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public void capturePayment(Event event) {
+    public ResponseEntity<?> capturePayment(Event event) {
         if ("checkout.session.completed".equals(event.getType())) {
             Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
-            if (session == null) return;
+            if (session == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Session is invalid");
+            }
 
             String sessionId = session.getId();
             Booking booking =
                     bookingRepository.findByPaymentSessionId(sessionId).orElseThrow(() ->
                             new ResourceNotFoundException("Booking not found for session ID: " + sessionId));
 
+            if(booking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
+                return ResponseEntity.ok().build();
+            }
             booking.setBookingStatus(BookingStatus.CONFIRMED);
             bookingRepository.save(booking);
 
@@ -192,8 +199,10 @@ public class BookingServiceImpl implements BookingService {
                 inventoryRepository.save(inventory);
             });
             log.info("Successfully confirmed the booking for Booking ID: {}", booking.getId());
+            return ResponseEntity.ok().build();
         } else {
             log.warn("Unhandled event type: {}", event.getType());
+            return ResponseEntity.internalServerError().build();
         }
     }
 

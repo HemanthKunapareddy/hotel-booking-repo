@@ -20,14 +20,12 @@ public class WebhookController {
     private String endpointSecret;
 
     @PostMapping("/payments")
-    public ResponseEntity<Void> capturePayments(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
+    public ResponseEntity<?> capturePayments(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
         try {
             System.out.println("Entered webhook controller");
             Event event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
             System.out.println("✅ Received event: " + event.getType());
-
-            bookingService.capturePayment(event);
-            return ResponseEntity.noContent().build();
+            return bookingService.capturePayment(event);
         } catch (SignatureVerificationException e) {
             throw new RuntimeException(e);
         }

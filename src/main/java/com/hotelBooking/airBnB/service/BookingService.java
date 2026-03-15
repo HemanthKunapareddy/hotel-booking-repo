@@ -4,6 +4,7 @@ import com.hotelBooking.airBnB.dto.BookingDTO;
 import com.hotelBooking.airBnB.dto.BookingRequest;
 import com.hotelBooking.airBnB.dto.GuestDTO;
 import com.stripe.model.Event;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface BookingService {
 
     String initiatePayment(Long bookingId);
 
-    void capturePayment(Event event);
+    ResponseEntity<?> capturePayment(Event event);
 
     void cancelpayment(Long bookingId);
 }
