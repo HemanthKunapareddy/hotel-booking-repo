@@ -198,6 +198,7 @@ public class BookingServiceImpl implements BookingService {
                 inventory.setBookedCount(inventory.getBookedCount() + booking.getRoomsCount());
                 inventoryRepository.save(inventory);
             });
+
             log.info("Successfully confirmed the booking for Booking ID: {}", booking.getId());
             return ResponseEntity.ok().build();
         } else {
@@ -208,7 +209,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public void cancelpayment(Long bookingId) {
+    public void cancelPayment(Long bookingId) {
         Booking booking = bookingRepository
                 .findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking with Id: " + bookingId + " not found"));
@@ -223,6 +224,12 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingStatus(CANCELLED);
         bookingRepository.save(booking);
+
+        inventoryRepository.findAndLockReservedInventory(booking.getRoomId().getId(), booking.getCheckInDate(),
+                booking.getCheckOutDate(), booking.getRoomsCount());
+
+        inventoryRepository.cancelBooking(booking.getRoomId().getId(), booking.getCheckInDate(),
+                booking.getCheckOutDate(), booking.getRoomsCount());
 
         try {
             Session session = Session.retrieve(booking.getPaymentSessionId());

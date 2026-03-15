@@ -18,5 +18,5 @@ public interface BookingService {
 
     ResponseEntity<?> capturePayment(Event event);
 
-    void cancelpayment(Long bookingId);
+    void cancelPayment(Long bookingId);
 }

@@ -51,7 +51,7 @@ public class BookingController {
     @PostMapping("/{bookingId}/cancelPayment")
     public ResponseEntity<PaymentDTO> cancelPayment(@PathVariable Long bookingId){
         log.info(AppConstants.IN_CLASS_METHOD, CLASS_NAME, "initializePayment");
-        bookingService.cancelpayment(bookingId);
+        bookingService.cancelPayment(bookingId);
         return ResponseEntity.noContent().build();
     }
 
